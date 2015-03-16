@@ -15,7 +15,6 @@ jimple
         if (!config.theme_prefix) {
             config.theme_prefix = 'theme:';
         }
-
         return config;
     })
     .share('logger', function() {
@@ -145,15 +144,35 @@ jimple
         return new Projects(container.get('gitlab'));
     })
     .share('gitlab.issues', function(container) {
-        var Issues = require('./lib/gitlab/issues');
+		if(container.get('config').postgre.host) {
+			var Issues = require('./lib/postgre/issues');
 
-        return new Issues(
-            container.get('gitlab'),
-            container.get('gitlab.projects'),
-            container.get('gitlab.formatter'),
-            container
-        );
+			return new Issues(
+				container.get('postgre'),
+				container.get('gitlab'),
+				container.get('gitlab.projects'),
+				container.get('gitlab.formatter'),
+				container
+			);
+
+		} else {
+			var Issues = require('./lib/gitlab/issues');
+
+			return new Issues(
+				container.get('gitlab'),
+				container.get('gitlab.projects'),
+				container.get('gitlab.formatter'),
+				container
+			);
+
+		}
     })
+	.share('postgre', function(container) {
+		var Postgre = require('./lib/postgre');
+		var config = container.get('config').postgre;
+
+		return new Postgre(config.user, config.pwd, config.host, config.db);
+	})
     .share('app', function(container) {
         var application = express();
 

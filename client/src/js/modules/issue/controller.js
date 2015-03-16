@@ -64,5 +64,14 @@ angular.module('laboard-frontend')
             };
 
             $scope.draggable = $authorization.authorize('developer');
+
+			$scope.issueNsProject = function() {
+				if($scope.issue.project && $scope.issue.namespace) {
+					// if project and ns are set on issue it comes from postgre query and URL should be built from values returned there
+					return $scope.issue.namespace + '/' + $scope.issue.project;
+				}
+
+				return $scope.project.path_with_namespace
+			};
         }
     ]);

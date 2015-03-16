@@ -7,5 +7,11 @@ module.exports = {
     "redis": {
         "host": process.env.LABOARD_REDIS_HOST || "redis",
         "port": process.env.LABOARD_REDIS_PORT || 6379
+    },
+    "postgre": {
+        "host": process.env.LABOARD_POSTGRE_HOST || false,
+        "user": process.env.LABOARD_POSTGRE_USER || false,
+        "pwd": process.env.LABOARD_POSTGRE_PWD || false,
+        "db": process.env.LABOARD_POSTGRE_DB || false
     }
 };
