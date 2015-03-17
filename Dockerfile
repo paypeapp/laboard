@@ -1,29 +1,18 @@
-FROM hwestphal/nodebox
+FROM gliderlabs/alpine:3.1
+RUN apk-install nodejs git python g++ make
 
-RUN sed -i 's?x86_64/packages/?x86_64/generic/packages/?' /etc/opkg.conf && \
-    opkg-cl update && \
-    opkg-cl upgrade
-
-ENV NODE_ENV=production
-
-RUN npm install -g pm2
-
-RUN rm -f /var/log && \
-    rm -f /var/run && \
-    mkdir -p /var/log/laboard && \
-    mkdir -p /var/run/laboard
-
-VOLUME /var/log/laboard
-VOLUME /var/run/laboard
+RUN npm install -g bower gulp
 
 RUN mkdir -p /app/config && \
     mkdir -p /app/client/public
 
 COPY ./bin /app/bin
 COPY ./server /app/server
-COPY ./client/public /app/client/public
+COPY ./client/ /app/client/
 COPY ./config/client.js-dist /app/client/public/assets/js/config.js
 COPY ./config/server.js-dist /app/config/server.js
+COPY ./bower.json /app/bower.json
+COPY ./gulpfile.js /app/gulpfile.js
 
 WORKDIR /app
 
@@ -33,7 +22,10 @@ RUN npm install && \
     npm cache clean && \
     (rm -rf /tmp/* || true)
 
-ENTRYPOINT ["pm2", "--no-daemon"]
-CMD ["--log", "/var/log/laboard/laboard.log", "--pid", "/var/run/laboard/laboard.pid", "--name", "laboard", "start", "bin/server.js"]
+ENV NODE_ENV production
+
+RUN bower install --allow-root
+
+ENTRYPOINT ["gulp"]
 
 EXPOSE 8080
