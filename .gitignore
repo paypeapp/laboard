@@ -12,3 +12,4 @@ covershot/
 karma_html/
 server-cov/
 vendor/
+*.rdp

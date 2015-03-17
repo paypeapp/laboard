@@ -4,22 +4,21 @@ angular.module('laboard-frontend')
         {
             defaultColumns: [
                 {
-                    title: 'Sandbox',
+                    title: 'Backlog',
                     position: 0,
                     unpinned: true
                 },
                 {
-                    title: 'Backlog',
+                    title: 'Todo',
                     position: 1
                 },
                 {
-                    title: 'Accepted',
+                    title: 'Progress',
                     position: 2
                 },
                 {
-                    title: 'Review',
-                    position: 3,
-                    theme: 'info'
+                    title: 'Stabilization',
+                    position: 3
                 },
                 {
                     title: 'Done',
