@@ -16,14 +16,15 @@ var q = require('q'),
 				(select m.title from milestones as m where m.id=i.milestone_id) as milestone\
 				from issues as i\
 				left join projects as p on i.project_id = p.id\
-				left join namespaces as n on p.namespace_id = n.id";
+				left join namespaces as n on p.namespace_id = n.id\
+				where i.state != 'closed'";
 	};
 
 issues.prototype = {
 	one: function(token, namespace, project, id) {
 		var self = this,
 			deferred = q.defer(),
-			sql = this.sqlSelect + ' where i.id=$1;';
+			sql = this.sqlSelect + ' and i.id=$1;';
 
 		this.db.get(
 			sql,
