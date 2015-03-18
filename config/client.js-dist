@@ -6,25 +6,30 @@ angular.module('laboard-frontend')
                 {
                     title: 'Backlog',
                     position: 0,
+                    theme: 'info',
                     unpinned: true
                 },
                 {
                     title: 'Todo',
-                    position: 1
+                    position: 1,
+                    canGoBackward: true
                 },
                 {
                     title: 'Progress',
-                    position: 2
+                    position: 2,
+                    canGoBackward: true
                 },
                 {
                     title: 'Stabilization',
-                    position: 3
+                    position: 3,
+                    canGoBackward: true
                 },
                 {
                     title: 'Done',
                     position: 4,
                     theme: 'success',
-                    closable: true
+                    closable: true,
+                    canGoBackward: true
                 }
             ]
         }
