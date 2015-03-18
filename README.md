@@ -11,3 +11,4 @@ It just has changes that one team needs to manage their board.
 * Only non-closed issues on board
 * Ordering of issues
 * Docker running gulp
+* Changed default column names
