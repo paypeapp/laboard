@@ -194,6 +194,24 @@ angular.module('laboard-frontend')
 
                         return deferred.promise;
                     },
+					sort: function(issue) {
+						var self = this,
+							deferred = $q.defer();
+
+						$rest.all('projects/' + $root.project.path_with_namespace)
+							.one('issues', issue.iid)
+							.customPUT(issue, 'sort')
+							.then(
+							function(issue) {
+								deferred.resolve(self.add(issue));
+							},
+							function(err) {
+								deferred.reject(err);
+							}
+						);
+
+						return deferred.promise;
+					},
                     star: function(issue) {
                         var self = this,
                             deferred = $q.defer();

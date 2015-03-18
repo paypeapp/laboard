@@ -32,6 +32,21 @@ angular.module('laboard-frontend')
                 });
             };
 
+			$scope.sort = function() {
+				var nr = Date.now() / 1000 | 0; // timestamp in seconds, could also use ordering by number and send that in as a param to this func
+				$scope.issue.before = $scope.issue.sort || null;
+
+				if (nr === $scope.issue.before) {
+					nr = null;
+				}
+
+				$scope.issue.after = nr;
+
+				$issues.sort($scope.issue).then(null, function() {
+					$scope.issue.sort = $scope.issue.before;
+				});
+			};
+
             $scope.star = function(starred) {
                 $scope.issue.starred = typeof starred === 'undefined' ? true : !!starred;
 

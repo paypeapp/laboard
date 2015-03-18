@@ -117,6 +117,45 @@ module.exports = function(router, container) {
         }
     );
 
+	router.authenticated.put('/projects/:ns/:name/issues/:id/sort',
+		container.get('authorization')('developer'),
+		function(req, res) {
+			var issue = req.body;
+			delete issue.access_token;
+
+			if (!issue.before && !issue.after) {
+				res.error.notAcceptable({
+					message: 'Not acceptable'
+				});
+			} else {
+				var before = (issue.before || ''),
+					after = (issue.after || ''),
+					old = container.get('config').sort_prefix + (before || 'default'),
+					nw = container.get('config').sort_prefix + (after || 'default');
+
+				(issue.labels || []).forEach(function(label, key) {
+					if ([old, nw].indexOf(label) > -1) {
+						issue.labels.splice(key, 1);
+					}
+				});
+
+				if (before !== after && after) {
+					issue.labels.push(nw);
+					issue.sort = after;
+				} else {
+					issue.sort = null;
+				}
+
+				container.get('gitlab.issues').persist(req.user.private_token, req.params.ns, req.params.name, issue)
+					.then(function(issue) {
+						return container.get('notifier.issues').notifyTheme(req.params.ns, req.params.name, issue, before, after);
+					})
+					.then(res.response.ok)
+					.fail(res.error);
+			}
+		}
+	);
+
     router.authenticated.put('/projects/:ns/:name/issues/:id/star',
         container.get('authorization')('developer'),
         function(req, res) {

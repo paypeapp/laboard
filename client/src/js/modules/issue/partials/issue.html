@@ -21,7 +21,8 @@
                 <li><a data-ng-click="theme('danger')" class="faa-parent animated-hover"><i class="fa fa-circle faa-tada animated-hover text-danger"></i> Red</a></li>
                 <li class="divider"></li>
                 <li><a data-ng-click="star(!!!issue.starred)" class="faa-parent animated-hover"><i class="fa faa-tada animated-hover" data-ng-class="{'fa-star': !!!issue.starred, 'fa-star-o': !!issue.starred}"></i> <span data-ng-if="!!!issue.starred">Star</span><span data-ng-if="!!issue.starred">Unstar</span></a></li>
-                <li data-ng-if="!$root.project.unpinned">
+				<li><a data-ng-click="sort()" class="faa-parent animated-hover"><i class="fa fa-arrow-circle-o-up faa-tada animated-hover"></i> <span>Sort</span></a></li>
+				<li data-ng-if="!$root.project.unpinned">
                     <a data-ng-click="unpin()" class="faa-parent animated-hover">
                         <i class="fa fa-thumb-tack faa-tada animated-hover"></i> Unpin
                     </a>

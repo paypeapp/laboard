@@ -3,15 +3,17 @@ var  _ = require('lodash'),
 
 module.exports = {
     formatIssueFromGitlab: function(issue) {
-        issue = _.pick(issue, ['id', 'iid', 'title', 'created_at', 'updated_at', 'assignee', 'author', 'labels', 'milestone', 'state', 'description', 'project', 'namespace']);
+		var regExCol = new RegExp("^" + container.get('config').column_prefix),
+			regExTheme = new RegExp("^" + container.get('config').theme_prefix),
+			regExSort = new RegExp("^" + container.get('config').sort_prefix);
+
+		issue = _.pick(issue, ['id', 'iid', 'title', 'created_at', 'updated_at', 'assignee', 'author', 'labels', 'milestone', 'state', 'description', 'project', 'namespace']);
         issue.column = null;
-        issue.theme = null;
+		issue.theme = null;
+		issue.sort = 999999;
         issue.starred = false;
 
         (issue.labels || []).forEach(function(label, key) {
-                var regExCol = new RegExp("^" + container.get('config').column_prefix),
-                    regExTheme = new RegExp("^" + container.get('config').theme_prefix);
-
                 if (regExCol.test(label)) {
                     issue.column = label.replace(regExCol, '');
                     delete issue.labels[key];
@@ -21,6 +23,11 @@ module.exports = {
                     issue.theme = label.replace(regExTheme, '');
                     delete issue.labels[key];
                 }
+
+				if (regExSort.test(label)) {
+					issue.sort = label.replace(regExSort, '');
+					delete issue.labels[key];
+				}
 
                 if (label === container.get('config').board_prefix + 'starred') {
                     issue.starred = true;
